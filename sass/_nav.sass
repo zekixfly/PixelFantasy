@@ -1,0 +1,111 @@
+.nav
+    float: left
+    width: 25%
+    height: auto        
+    padding: 0 10px
+    font-size: 20px
+    text-align: right
+    color: rgba(0, 0, 0, 0.4)
+    +clearfix
+    h1
+        height: inherit
+        font-size: 30px
+        // color: #fff
+        font-weight: bold
+        height: 57px
+        img
+            width: 165px
+            height: 57px
+
+    &-list
+        font-size: 16px
+        color: rgba(0, 0, 0, 0.4)
+        margin: 25px 0
+        &>li>a
+            border-right: 3px solid rgba(0,0,0,0)
+            &:hover,&.active
+                border-right: 3px solid rgba(0,0,0,1)
+
+        li
+            display: block
+            // color: inherit
+            padding: 3px 8px
+            &>a
+                color: inherit
+                cursor: pointer
+                padding: 3px 8px
+                &:hover,&.active
+                    color: #000
+            &:hover::after
+                    color: #000
+
+        &-m
+            display: none
+            width: 1.5em
+            height: 57px
+            position: absolute
+            left: calc(-1.5em * 2)
+            top: 0px
+            img
+                width: inherit
+                height: inherit
+                &.close
+                    display: none
+
+    &-list-pixel
+        li
+            border-right: 1px solid rgba(0, 0, 0, 0.2)
+            margin-right: 18px
+            &::after
+                content: "-"
+                // color: rgba(0, 0, 0, 0.12)
+                font-size: 12px
+                margin-left: 4px
+
+.nav-list-pixel li:has(>a.active)::after
+    color: #000
+
+a:has(+ul>li a:hover),a:has(+ul>li a.active)
+    border-right: 3px solid rgba(0,0,0,1)
+    color: #000
+
+.offset-0
+    right: 0px !important
+
+@media (max-width: 768px)
+    .nav
+        padding: 20px
+        width: 260px
+        height: 100%
+        position: fixed
+        right: -260px
+        text-align: left
+        background-color: black
+        color: white !important
+        h1
+            img
+                width: 100%
+                height: auto
+                image-rendering: pixelated
+        &-list
+            font-size: 1.5rem
+            color: rgba(255, 255, 255, 0.4)
+            li>a
+                &:hover,&.active
+                    color: white
+                
+            &-m
+                display: block
+        &-list-pixel
+            li
+                border-left: 1px solid rgba(255,255,255,0.5)
+                margin-left: 18px
+                &::before
+                    content: "-"
+                    // color: rgba(0, 0, 0, 0.12)
+                    font-size: 12px
+                    margin-right: 4px
+                &::after
+                    display: none
+    a:has(+ul>li a:hover),a:has(+ul>li a.active)
+        color: white

@@ -1,0 +1,49 @@
+@mixin clearfix
+  &:before
+    content: ""
+    display: table
+  &:after
+    content: ""
+    display: table
+    clear: both
+  zoom: 1
+
+@mixin breakpoint($point)
+  $xs: 600px
+  $sm: 768px
+  $md: 1023px
+  $lg: 1280px
+  $mobile-range: ($sm - 1)
+  $tablet-range: ($sm, $md)
+  $deaktop-range: ($md + 1)
+
+  @if $point == 'mobile-range'
+    @media (max-width: #{$mobile-range})
+      @content
+  @if $point == 'tablet-range'
+    @media (min-width:#{lower-bound($tablet-range)}) and (max-width:#{upper-bound($tablet-range)})
+      @content
+  @if $point == 'deaktop-range'
+    @media (min-width: #{$deaktop-range})
+      @content
+  @if $point == 'xs-max'
+    @media (max-width: #{$xs})
+      @content
+  @if $point == 'sm-max'
+    @media (max-width: #{($sm - 1)})
+      @content
+  @if $point == 'sm-min'
+    @media (min-width: #{$sm})
+      @content
+  @if $point == 'md-max'
+    @media (max-width: #{$md})
+      @content
+  @if $point == 'md-min'
+    @media (min-width: #{($md + 1)})
+      @content
+  @if $point == 'lg-max'
+    @media (max-width: #{$lg})
+      @content
+  @if $point == 'lg-min'
+    @media (min-width: #{$lg + 1})
+      @content
