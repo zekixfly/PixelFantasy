@@ -582,8 +582,15 @@ a:has(+ ul > li a:hover), a:has(+ ul > li a.active) {
     border-bottom: 2px dashed rgba(0, 0, 0, 0.2);
   }
 }
+.contactForm .item {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 15px;
+}
+
 .contactForm input, .contactForm textarea {
   padding: 5px;
+  width: 50%;
 }
 
 @media (max-width: 768px) {
@@ -598,7 +605,9 @@ a:has(+ ul > li a:hover), a:has(+ ul > li a.active) {
 .contactForm input[type=submit] {
   background-color: #A76F7A;
   color: #fff;
-  padding: 5px;
+  padding: 5px 15px;
+  width: -moz-fit-content;
+  width: fit-content;
 }
 
 .required, .formTip, .return {
