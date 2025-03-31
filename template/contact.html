@@ -23,7 +23,7 @@
 
         <p class="required">*is required</p>        
         <br/>
-        <input id="sendZeki" type="submit" value="Send ✉" />
+        <input id="sendZeki" type="submit" value="Send 📤" />
         
     </form>
     <div id="send-status" class="sendStatus">
@@ -45,10 +45,8 @@
             getId('send-status').delClass('d-none');
             emailjs.sendForm('service_zekixfly', 'template_zekixfly', this)
                 .then(function() {
-                    resultPage("✔️ Mail sent successfully!");
+                    resultPage("✅ Mail sent successfully!");
                 }, function(error) {
-                    console.log(error?.text);
-                    
                     resultPage(`❌ Sorry, Mail delivery failed...<br />${error?.text}`);
                 });
         });
