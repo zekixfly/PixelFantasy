@@ -1,15 +1,15 @@
 async function pixelArtWork(id){
-    getId(`${id}Work`).addClass('d-none');
+    const root = getId(`${id}Work`);
+    root.addClass('d-none');
     const res = await fetch(API_GET_DATA);
     const data =  await res.json();
-    getId(`${id}Work`).innerHTML = '';
+    root.innerHTML = '';
     for(var idx in data){
-        var divElement = makeTag("div");
-        divElement.className = "pixelart_Thumbnail";
-
         // console.log(`${id.replace(/^./, id[0].toUpperCase())} Fantasy`);
         // 替換id第一個小寫字母為大寫                
         if(`${id.replace(/^./, id[0].toUpperCase())}` === data[idx].category){
+            var divElement = makeTag("div");
+            divElement.className = "pixelart_Thumbnail";
             var imgElement = makeTag("img");
             imgElement.src = `img/pixelart/${id}/` + data[idx].src;
             imgElement.addEventListener("load", () => {
@@ -53,7 +53,7 @@ async function pixelArtWork(id){
                 });                        
             }
 
-            getId(`${id}Work`).addKid(divElement);
+            root.addKid(divElement);
         }
     }
 
@@ -63,7 +63,7 @@ async function pixelArtWork(id){
     for(let i=0; i<4; i++){
         var dummyElement = makeTag("div");
         dummyElement.className = "filling-empty-space-childs";
-        getId(`${id}Work`).addKid(dummyElement);
+        root.addKid(dummyElement);
     }
 
     // 延遲函式
@@ -71,7 +71,7 @@ async function pixelArtWork(id){
     //     return new Promise(resolve => setTimeout(resolve, ms));
     //   }
     // await sleep(5000);
-    let images = getId(`${id}Work`).getTags('img');
+    let images = root.getTags('img');
     const promises = images.map(image => {
         return new Promise((resolve,reject)=>{
             image.onload = () => resolve(image);
@@ -85,13 +85,13 @@ async function pixelArtWork(id){
         results.map(result=>{
             // 如果圖片載入錯誤，則刪除該元素節點不顯示出來!
             if(result.status === 'rejected') {
-                getId(`${id}Work`).delKid(result.reason.parentNode)
+                root.delKid(result.reason.parentNode)
                 console.debug(`The ${result.reason.src} url is Error!`);
             }
         });
         // 圖片載入完成時，關閉loading動畫，顯示所有圖片。
         getClasses('loading')[0].addClass('d-none');
-        getId(`${id}Work`).delClass('d-none');
+        root.delClass('d-none');
 
         // 判斷是否從News點擊載入
         if(document.querySelector('[slot=content]').getAttr('src')){
