@@ -1,24 +1,13 @@
-﻿//Copyright
-(function(){
-  var crz = 'Copyright Zone';
-  crz = crz.padStart(crz.length+15, "-").padEnd(crz.length+15*2,"-");
-  console.log(
-    `%c${crz}\n
-    Author: Zeki
-    Mail: zekixfly@hotmail.com
+﻿/*-------------版權區---------------
+作者: Zeki
+信箱: zekixfly@hotmail.com
+
+版權聲明:
+一、本網站的版權屬原作者所有。 
+二、盼望尊重知識產權，如要轉貼複製請註明出處來源。
+三、出處來源: https://zekixfly.github.io/
     
-    版權聲明:
-    一、本網站的版權屬原作者所有。
-    二、盼望尊重知識產權，如要轉貼複製請註明出處來源。
-    三、出處來源: https://zekixfly.github.io/zekistory/\n
-    ${crz}`, 'font-size: small; color: brown;'
-  );
-  document.oncontextmenu = () => false; // disable contextmenu
-  document.ondragstart= () => false; // disable drag
-  document.onselectstart = () => false; // disable select
-})();
-
-
+---------------版權區-------------*/
 
 // body append Child
 Object.defineProperty(HTMLBodyElement.prototype, 'addKid', {
@@ -598,9 +587,23 @@ Object.defineProperties(HTMLCollection.prototype, {
   }
 });
 
-loadZekiImports(); // load ZekiCore.js import scripts
-
-
-
-
-
+//Copyright
+(function(){
+  var crz = 'Copyright Zone';
+  crz = crz.padStart(crz.length+15, "-").padEnd(crz.length+15*2,"-");
+  console.log(
+    `%c${crz}\n
+    Author: Zeki
+    Mail: zekixfly@hotmail.com
+    
+    版權聲明:
+    一、本網站的版權屬原作者所有。
+    二、盼望尊重知識產權，如要轉貼複製請註明出處來源。
+    三、出處來源: https://zekixfly.github.io/
+    \n${crz}`, 'font-size: small; color: brown;'
+  );
+  document.oncontextmenu = () => false; // disable contextmenu
+  document.ondragstart= () => false; // disable drag
+  document.onselectstart = () => false; // disable select
+  document.addEventListener('DOMContentLoaded', loadZekiImports); // load ZekiCore.js imports
+})();
