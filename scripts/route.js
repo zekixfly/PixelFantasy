@@ -121,11 +121,12 @@ window.addEventListener(history.pushState.name, function(e) {
 });
 
 // 監聽此頁面的DOM都載入完畢時，才觸發做函式。
-document.addEventListener("DOMContentLoaded", function(event) {
-
+document.addEventListener("readystatechange", function(event) {
+    if(event.target.readyState !== 'interactive' && event.target.readyState !== 'complete') return;
     route.tempLoad('nav', 'nav');
     
     let url = location.pathname.split("/")[location.pathname.split("/").length-1];
+    
     if(url == '' || url == 'index.html'){           
         route.replace('news');
     }else{

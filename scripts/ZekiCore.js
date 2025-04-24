@@ -20,8 +20,6 @@
 
 
 
-
-
 // body append Child
 Object.defineProperty(HTMLBodyElement.prototype, 'addKid', {
   value: function(element) {  
@@ -106,6 +104,43 @@ Object.defineProperties(Document.prototype,  {
 })
 
 Object.defineProperties(window, {
+  //import JS file
+  'importJS': {
+    value: function(jsArray) {
+      let scriptTag;
+      for (var i = 0 ; i<jsArray.length; i++) {
+        scriptTag = document.createElement('script')
+        scriptTag.async = false;
+        scriptTag.type = 'text/javascript';
+        scriptTag.src = jsArray[i];
+        document.head.appendChild(scriptTag);
+      }
+    },
+    writable: false,
+    enumerable: false
+  },
+  //Check all script tags to see if they have ZekiCore js, and if so, check if they have import attributes, if so, import them.
+  'loadZekiImports': {
+    value: function() {
+      const scripts = document.querySelectorAll('script[src*="ZekiCore"][import]');
+      for (const script of scripts) {
+        const ImportSrc = script.getAttribute('import').trim();
+        if (ImportSrc) {
+          const importTag = document.createElement('script');
+          importTag.async = false;
+          importTag.type = 'text/javascript';
+          importTag.src = `scripts/${ImportSrc}.js`;
+          importTag.onerror = () => {
+            console.error(`Failed to load script: ${importTag.src}`);
+          };
+          document.head.appendChild(importTag);
+          script.removeAttribute('import');
+        }
+      }
+    },
+    writable: false,
+    enumerable: false
+  },
   //create element
   'makeTag': {
     value: function(tagName) {
@@ -530,8 +565,6 @@ Object.defineProperties(Array.prototype, {
   // etc. etc.
 });
 
-// HTMLCollection.call(obj)
-
 Object.defineProperties(HTMLCollection.prototype, {
   'map': {
     value: function(mapFn) {      
@@ -565,6 +598,7 @@ Object.defineProperties(HTMLCollection.prototype, {
   }
 });
 
+loadZekiImports(); // load ZekiCore.js import scripts
 
 
 
