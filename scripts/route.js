@@ -59,18 +59,17 @@ let route = {
                     ZekiCore.one('[slot=nav]').html = htmlTemplate;
                     mountScript('nav');
                     let menuSwitch = false;
-                    function menuSlide() {
+                    function menuSlide() {                    
                         menuSwitch = !menuSwitch
-                        if(this instanceof Window) return;
                         if(menuSwitch){
-                            ZekiCore.toZeki(this).getClass('menu')[0].addClass('d-none');
-                            ZekiCore.toZeki(this).getClass('close')[0].addClass('d-block');
+                            ZekiCore.getId('navList-m').getClass('menu')[0].addClass('d-none');
+                            ZekiCore.getId('navList-m').getClass('close')[0].addClass('d-block');
                             ZekiCore.getTag('body')[0].addClass('offset-260');
-                            ZekiCore.getClass('nav')[0].addClass('offset-0');
+                            ZekiCore.getClass('nav')[0].addClass('offset-0');       
                         }
                         else{
-                            ZekiCore.toZeki(this).getClass('menu')[0].delClass('d-none');
-                            ZekiCore.toZeki(this).getClass('close')[0].delClass('d-block');
+                            ZekiCore.getId('navList-m').getClass('menu')[0].delClass('d-none');
+                            ZekiCore.getId('navList-m').getClass('close')[0].delClass('d-block');
                             ZekiCore.getTag('body')[0].delClass('offset-260');
                             ZekiCore.getClass('nav')[0].delClass('offset-0');
                         }
