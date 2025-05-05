@@ -35,14 +35,14 @@
 
     <script type="text/javascript">
         emailjs.init('A1O32767lvzH8CNyq');
-        getId('send-status').addClass('d-none');
-        getId('contact-form').addEventListener('submit', function(event) {
+        ZekiCore.getId('send-status').addClass('d-none');
+        ZekiCore.getId('contact-form').on('submit', function(event) {
             event.preventDefault();
             // generate a five digit number for the contact_number variable
             this.contact_number.value = Math.random() * 100000 | 0;
             // these IDs from the previous steps
-            getId('contact-form').addClass('d-none');
-            getId('send-status').delClass('d-none');
+            ZekiCore.getId('contact-form').addClass('d-none');
+            ZekiCore.getId('send-status').delClass('d-none');
             emailjs.sendForm('service_zekixfly', 'template_zekixfly', this)
                 .then(function() {
                     resultPage("✅ Mail sent successfully!");
@@ -51,15 +51,15 @@
                 });
         });
         function resultPage(message){        
-            getId('send-status').getClasses('msg')[0].innerHTML = message;
-            getId('send-status').getClasses('sending')[0].addClass('d-none');
-            getId('send-status').getClasses('return')[0].addClass('d-block');
-            getId('send-status').getClasses('return')[0].addEventListener('click',()=>{
-                getId('send-status').getClasses('sending')[0].delClass('d-none');
-                getId('send-status').getClasses('return')[0].delClass('d-block');
-                getId('send-status').getClasses('msg')[0].innerHTML = 'Sending mail...';
-                getId('send-status').addClass('d-none');
-                getId('contact-form').delClass('d-none');
+            ZekiCore.getId('send-status').getClass('msg')[0].html = message;
+            ZekiCore.getId('send-status').getClass('sending')[0].addClass('d-none');
+            ZekiCore.getId('send-status').getClass('return')[0].addClass('d-block');
+            ZekiCore.getId('send-status').getClass('return')[0].on('click',()=>{
+                ZekiCore.getId('send-status').getClass('sending')[0].delClass('d-none');
+                ZekiCore.getId('send-status').getClass('return')[0].delClass('d-block');
+                ZekiCore.getId('send-status').getClass('msg')[0].html = 'Sending mail...';
+                ZekiCore.getId('send-status').addClass('d-none');
+                ZekiCore.getId('contact-form').delClass('d-none');
             })
         }
 

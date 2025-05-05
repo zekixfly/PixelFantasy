@@ -1,4 +1,4 @@
-importJS([
+ZekiCore.importJS([
   "scripts/constants.js",
   "scripts/news.js",
   "scripts/pixelartwork.js",
