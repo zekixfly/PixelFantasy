@@ -8,11 +8,9 @@ let route = {
     active: function(ref) {           
         
         const currentNode = ZekiCore.one(`[href=${ref}]`)
-        document.title = `Pixel Fantasy - ${ref.replace(/^./,ref[0].toUpperCase())}`;
+        document.title = `Pixel Fantasy - ${ref.replace(/^./, ref[0].toUpperCase())}`;
 
-        ZekiCore.all(`li a`).forEach(ele => {
-            ele.delClass('active');
-        });
+        ZekiCore.all(`li a`).delClass('active');
 
         currentNode.addClass('active');
 
@@ -38,9 +36,10 @@ let route = {
                 故在此判斷已掛載的template樣板網頁裡是否有script，
                 如果有script就取得已掛載網頁裡的script，
                 並將原本的script標籤刪除並重新載入scirpt執行。 */
-                if(ZekiCore.one(`[slot=${target}]`).getTag('script').length !== 0){
-                    [...ZekiCore.one(`[slot=${target}]`).getTag('script')].map( script => {
-                        ZekiCore.one(`[slot=${target}]`).delKid(script);
+                const slotTargetEl = ZekiCore.one(`[slot=${target}]`);
+                if(slotTargetEl.getTag('script').length !== 0){
+                    Array.from(slotTargetEl.getTag('script')).forEach( script => {
+                        slotTargetEl.delKid(script);
                         const scriptTag = ZekiCore.makeTag('script');
                         scriptTag.type = script.type || 'text/javascript';
                         if(script.src){
@@ -48,7 +47,7 @@ let route = {
                         }else if(script.html){
                             scriptTag.html = script.html;
                         }
-                        ZekiCore.one(`[slot=${target}]`).addKid(scriptTag);
+                        slotTargetEl.addKid(scriptTag);
                     })                
                 }
             }
@@ -59,19 +58,22 @@ let route = {
                     ZekiCore.one('[slot=nav]').html = htmlTemplate;
                     mountScript('nav');
                     let menuSwitch = false;
-                    function menuSlide() {                    
+                    const navListMobileEl = ZekiCore.getId('navList-m');
+                    function menuSlide() {
+                        const bodyEl = ZekiCore.getTag('body')[0];
+                        const navEl = ZekiCore.getClass('nav')[0];
                         menuSwitch = !menuSwitch
                         if(menuSwitch){
-                            ZekiCore.getId('navList-m').getClass('menu')[0].addClass('d-none');
-                            ZekiCore.getId('navList-m').getClass('close')[0].addClass('d-block');
-                            ZekiCore.getTag('body')[0].addClass('offset-260');
-                            ZekiCore.getClass('nav')[0].addClass('offset-0');       
+                            navListMobileEl.getClass('menu')[0].addClass('d-none');
+                            navListMobileEl.getClass('close')[0].addClass('d-block');
+                            bodyEl.addClass('offset-260');
+                            navEl.addClass('offset-0');       
                         }
                         else{
-                            ZekiCore.getId('navList-m').getClass('menu')[0].delClass('d-none');
-                            ZekiCore.getId('navList-m').getClass('close')[0].delClass('d-block');
-                            ZekiCore.getTag('body')[0].delClass('offset-260');
-                            ZekiCore.getClass('nav')[0].delClass('offset-0');
+                            navListMobileEl.getClass('menu')[0].delClass('d-none');
+                            navListMobileEl.getClass('close')[0].delClass('d-block');
+                            bodyEl.delClass('offset-260');
+                            navEl.delClass('offset-0');
                         }
                     }
                     ZekiCore.getId('navList').on('click', event => {
@@ -80,11 +82,11 @@ let route = {
                             // route.tempLoad(event.target.getAttr('href'), 'content');
                             route.push(ZekiCore.toZeki(event.target).getAttr('href'));
                             route.active(ZekiCore.toZeki(event.target).getAttr('href'));
-                            getComputedStyle(ZekiCore.getId('navList-m').el).display !== 'none' && menuSlide();
+                            navListMobileEl.getStyle('display') !== 'none' && menuSlide();
                         }
                     })
                     
-                    ZekiCore.getId('navList-m').on('click', menuSlide);
+                    navListMobileEl.on('click', menuSlide);
                     route.active('news');
                     break;
                 case 'content':
