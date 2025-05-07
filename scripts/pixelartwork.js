@@ -33,9 +33,9 @@ async function pixelArtWork(id){
                 divEl.on("click", event => {
                     showBoxBackGroundEl.addClass("d-block");
                     showBoxEl.addClass("d-block");
-                    showBoxEl.getTag("img")[0].src = `img/pixelart/${id}/`+ ZekiCore.toZeki(event.currentTarget).getAttr("src");
+                    showBoxEl.getTag("img")[0].src = `img/pixelart/${id}/`+ ZekiCore.toZekiEl(event.currentTarget).getAttr("src");
                     showBoxEl.getClass("showBoxTitle")[0].html = event.currentTarget.title;
-                    showBoxEl.getClass("showBoxInfo")[0].html = ZekiCore.toZeki(event.currentTarget).getAttr("description");
+                    showBoxEl.getClass("showBoxInfo")[0].html = ZekiCore.toZekiEl(event.currentTarget).getAttr("description");
                     bodyEl.addClass('overflow-hidden');
                     ZekiCore.getClass("showBoxClose")[0].on("click", event => {
                         showBoxClose()

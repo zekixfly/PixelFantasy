@@ -66,8 +66,8 @@ async function getNews(){
     // 點擊News列表，將會自動載入相對應作品頁面。
     newsInfoEl.on('click', event => {
         if(event.srcElement.parentElement.tagName.toLowerCase() === 'li'){
-            route.push(ZekiCore.toZeki(event.srcElement.parentElement).getAttr('category').toLowerCase());
-            ZekiCore.one('[slot=content]').setAttr('src', ZekiCore.toZeki(event.srcElement.parentElement).getAttr('src')); 
+            route.push(ZekiCore.toZekiEl(event.srcElement.parentElement).getAttr('category').toLowerCase());
+            ZekiCore.one('[slot=content]').setAttr('src', ZekiCore.toZekiEl(event.srcElement.parentElement).getAttr('src')); 
         }
      })
 }

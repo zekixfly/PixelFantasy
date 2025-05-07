@@ -1,24 +1,23 @@
 let route = {
-    replace: function(ref = 'news') {
-        history.replaceState( {page: ref}, `${ref}`, `./#/${ref}`);
+    replace: function(id = 'news') {
+        history.replaceState( {id}, `${id}`, `./#/${id}`);
     },
-    push: function (ref = 'news') {
-        history.pushState( {page: ref}, `${ref}`, `./#/${ref}`);
+    push: function (id = 'news') {
+        history.pushState( {id}, `${id}`, `./#/${id}`);
     },
-    active: function(ref) {           
+    active: function(id) {           
         
-        const currentNode = ZekiCore.one(`[href=${ref}]`)
-        document.title = `Pixel Fantasy - ${ref.replace(/^./, ref[0].toUpperCase())}`;
+        document.title = `Pixel Fantasy - ${id.replace(/^./, id[0].toUpperCase())}`;
 
         ZekiCore.all(`li a`).delClass('active');
 
-        currentNode.addClass('active');
+        ZekiCore.one(`[href=${id}]`).addClass('active');
 
     },
-    tempLoad: async function(ref , target){
+    tempLoad: async function(id , target){
         
         try {
-            const response = await fetch(`./template/${ref}.html`);
+            const response = await fetch(`./template/${id}.html`);
             
             // 轉換成文字
             const htmlText = await response.text();
@@ -28,85 +27,70 @@ let route = {
             const htmlElement = htmlParser.parseFromString(htmlText, 'text/html');
 
             // 取得template樣板網頁的內容       
-            const zekiElement = ZekiCore.toZeki(htmlElement);            
+            const zekiElement = ZekiCore.toZekiEl(htmlElement);            
             const template = zekiElement.getTag('template')[0];
             const htmlTemplate = template.html;
-            function mountScript(target){
-                /* 因為已掛載的template樣板網頁，並不會自動執行script標籤裡面的語法，
-                故在此判斷已掛載的template樣板網頁裡是否有script，
-                如果有script就取得已掛載網頁裡的script，
-                並將原本的script標籤刪除並重新載入scirpt執行。 */
-                const slotTargetEl = ZekiCore.one(`[slot=${target}]`);
-                if(slotTargetEl.getTag('script').length !== 0){
-                    Array.from(slotTargetEl.getTag('script')).forEach( script => {
-                        slotTargetEl.delKid(script);
-                        const scriptTag = ZekiCore.makeTag('script');
-                        scriptTag.type = script.type || 'text/javascript';
-                        if(script.src){
-                            scriptTag.src = script.src;
-                        }else if(script.html){
-                            scriptTag.html = script.html;
-                        }
-                        slotTargetEl.addKid(scriptTag);
-                    })                
-                }
+            const slotTargetEl = ZekiCore.one(`[slot=${target}]`);
+
+            // 將template樣板網頁的內容放入對應的slot裡面
+            slotTargetEl.html = htmlTemplate;
+
+            /* 因為已掛載的template樣板網頁，並不會自動執行script標籤裡面的語法，
+            故在此判斷已掛載的template樣板網頁裡是否有script，
+            如果有script就取得已掛載網頁裡的script，
+            並將原本的script標籤刪除並重新載入scirpt執行。 */
+            if(slotTargetEl.getTag('script').length !== 0){
+                Array.from(slotTargetEl.getTag('script')).forEach( script => {
+                    slotTargetEl.delKid(script);
+                    const scriptTag = ZekiCore.makeTag('script');
+                    scriptTag.type = script.type || 'text/javascript';
+                    if(script.src){
+                        scriptTag.src = script.src;
+                    }else if(script.html){
+                        scriptTag.html = script.html;
+                    }
+                    slotTargetEl.addKid(scriptTag);
+                })                
             }
 
-            // 找尋插入的標籤
-            switch (target) {
-                case 'nav':
-                    ZekiCore.one('[slot=nav]').html = htmlTemplate;
-                    mountScript('nav');
-                    let menuSwitch = false;
-                    const navListMobileEl = ZekiCore.getId('navList-m');
-                    function menuSlide() {
-                        const bodyEl = ZekiCore.getTag('body')[0];
-                        const navEl = ZekiCore.getClass('nav')[0];
-                        menuSwitch = !menuSwitch
-                        if(menuSwitch){
-                            navListMobileEl.getClass('menu')[0].addClass('d-none');
-                            navListMobileEl.getClass('close')[0].addClass('d-block');
-                            bodyEl.addClass('offset-260');
-                            navEl.addClass('offset-0');       
-                        }
-                        else{
-                            navListMobileEl.getClass('menu')[0].delClass('d-none');
-                            navListMobileEl.getClass('close')[0].delClass('d-block');
-                            bodyEl.delClass('offset-260');
-                            navEl.delClass('offset-0');
-                        }
+            if(target === 'nav'){
+                let menuSwitch = false;
+                const navListMobileEl = ZekiCore.getId('navList-m');
+                function menuSlide() {
+                    const bodyEl = ZekiCore.getTag('body')[0];
+                    const navEl = ZekiCore.getClass('nav')[0];
+                    menuSwitch = !menuSwitch
+                    if(menuSwitch){
+                        navListMobileEl.getClass('menu')[0].addClass('d-none');
+                        navListMobileEl.getClass('close')[0].addClass('d-block');
+                        bodyEl.addClass('offset-260');
+                        navEl.addClass('offset-0');       
                     }
-                    ZekiCore.getId('navList').on('click', event => {
-                        event.preventDefault();
-                        if(ZekiCore.toZeki(event.target).getAttr('href')){
-                            // route.tempLoad(event.target.getAttr('href'), 'content');
-                            route.push(ZekiCore.toZeki(event.target).getAttr('href'));
-                            route.active(ZekiCore.toZeki(event.target).getAttr('href'));
-                            navListMobileEl.getStyle('display') !== 'none' && menuSlide();
-                        }
-                    })
-                    
-                    navListMobileEl.on('click', menuSlide);
-                    route.active('news');
-                    break;
-                case 'content':
-                    ZekiCore.one('[slot=content]').html = htmlTemplate;
-                    mountScript('content');
-
-                    route.active(location.hash.replace('#/', ''));
-                    break;
-                case 'footer':
-                    ZekiCore.one('[slot=footer]').html = htmlTemplate;
-                    mountScript('footer');
-                    break;
-                default:
-                    break;
+                    else{
+                        navListMobileEl.getClass('menu')[0].delClass('d-none');
+                        navListMobileEl.getClass('close')[0].delClass('d-block');
+                        bodyEl.delClass('offset-260');
+                        navEl.delClass('offset-0');
+                    }
+                }
+                ZekiCore.getId('navList').on('click', event => {
+                    event.preventDefault();
+                    if(ZekiCore.toZekiEl(event.target).getAttr('href')){
+                        // route.tempLoad(event.target.getAttr('href'), 'content');
+                        route.push(ZekiCore.toZekiEl(event.target).getAttr('href'));
+                        route.active(ZekiCore.toZekiEl(event.target).getAttr('href'));
+                        navListMobileEl.getStyle('display') !== 'none' && menuSlide();
+                    }
+                })
+                navListMobileEl.on('click', menuSlide);
+                route.active('news');
+            } else if(target === 'content'){
+                route.active(location.hash.replace('#/', ''));
             }
 
         } catch (error) {
              console.warn('Request Error:', error);
-        }   
-                       
+        }
     }
 };
 
@@ -139,9 +123,9 @@ document.addEventListener("readystatechange", function(event) {
 
 // 點擊上一頁下一頁觸發事件
 ZekiCore.on("popstate", event => {
-    if (event.state?.page) {
-        route.active(event.state.page);
-        route.replace(event.state.page);
+    if (event.state?.id) {
+        route.active(event.state.id);
+        route.replace(event.state.id);
     }
 });
 
