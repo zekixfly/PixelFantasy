@@ -34,35 +34,7 @@
     </div>
 
     <script type="text/javascript">
-        emailjs.init('A1O32767lvzH8CNyq');
-        ZekiCore.getId('send-status').addClass('d-none');
-        ZekiCore.getId('contact-form').on('submit', function(event) {
-            event.preventDefault();
-            // generate a five digit number for the contact_number variable
-            this.contact_number.value = Math.random() * 100000 | 0;
-            // these IDs from the previous steps
-            ZekiCore.getId('contact-form').addClass('d-none');
-            ZekiCore.getId('send-status').delClass('d-none');
-            emailjs.sendForm('service_zekixfly', 'template_zekixfly', this)
-                .then(function() {
-                    resultPage("✅ Mail sent successfully!");
-                }, function(error) {
-                    resultPage(`❌ Sorry, Mail delivery failed...<br />${error?.text}`);
-                });
-        });
-        function resultPage(message){        
-            ZekiCore.getId('send-status').getClass('msg')[0].html = message;
-            ZekiCore.getId('send-status').getClass('sending')[0].addClass('d-none');
-            ZekiCore.getId('send-status').getClass('return')[0].addClass('d-block');
-            ZekiCore.getId('send-status').getClass('return')[0].on('click',()=>{
-                ZekiCore.getId('send-status').getClass('sending')[0].delClass('d-none');
-                ZekiCore.getId('send-status').getClass('return')[0].delClass('d-block');
-                ZekiCore.getId('send-status').getClass('msg')[0].html = 'Sending mail...';
-                ZekiCore.getId('send-status').addClass('d-none');
-                ZekiCore.getId('contact-form').delClass('d-none');
-            })
-        }
-
+        initContact();
     </script>    
 </template>
 
