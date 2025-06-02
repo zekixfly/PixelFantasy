@@ -73,7 +73,7 @@
             if(location.hash.includes("#")) {
                 location.hash = `/${zk.toZekiEl(event.srcElement.parentElement).getAttr('category').toLowerCase()}`;
             } else {
-                history.pushState(null, "", `/${zk.toZekiEl(event.srcElement.parentElement).getAttr('category').toLowerCase()}`);
+                history.pushState(null, "", `./${zk.toZekiEl(event.srcElement.parentElement).getAttr('category').toLowerCase()}`);
             }
             zk.one('[slot=content]').setAttr('src', zk.toZekiEl(event.srcElement.parentElement).getAttr('src'));
       }

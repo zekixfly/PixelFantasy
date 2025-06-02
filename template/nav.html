@@ -4,12 +4,7 @@
     <img class="close" src="././svg/iconmonstr-x-mark-lined.svg" alt="" />
   </div>
   <h1>
-    <a href="./"
-      ><img
-        src="././img/Pixel-FantasyX3.png"
-        alt="Zeki's Secret Base."
-        title="Zeki's Secret Base."
-    /></a>
+    <a href="./"><img src="././img/Pixel-FantasyX3.png" alt="Zeki's Secret Base." title="Zeki's Secret Base."/></a>
   </h1>
   <!-- <h1>Pixel Fantasy</h1> -->
   <ul id="navList" class="nav-list">
@@ -31,19 +26,16 @@
 <script>
   const navListEl = zk.getId("navList");
   const navListMobileEl = zk.getId("navList-m");
-  
-  const router = navListEl.routerBind({
-    mode: "history",
-    routes: [
-      { path: "/", template: "news.html" },
-      { path: "/vogue", template: "pixel.html" },
-      { path: "/animal", template: "pixel.html" },
-      { path: "/vehicle", template: "pixel.html" },
-      { path: "/news", template: "news.html" },
-      { path: "/about", template: "about.html" },
-      { path: "/contact", template: "contact.html" },
-    ],
-  });
+  const routes = [
+    { path: "/", template: "news.html" },
+    { path: "/vogue", template: "pixel.html" },
+    { path: "/animal", template: "pixel.html" },
+    { path: "/vehicle", template: "pixel.html" },
+    { path: "/news", template: "news.html" },
+    { path: "/about", template: "about.html" },
+    { path: "/contact", template: "contact.html" },
+  ];
+  const router = navListEl.routerBind({ mode: "history", routes });
   zk.log("router", router);
 
   let menuSwitch = false;
