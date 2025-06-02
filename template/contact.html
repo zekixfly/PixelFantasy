@@ -1,40 +1,83 @@
-<template id='contact'>
-
-    <h1 class="headline">Contact Me</h1>    
+<template>
+    <h1 class="headline">Contact Me</h1>
     <form id="contact-form" class="contactForm">
 
         <input type="hidden" name="contact_number">
 
         <div class="item">
             <label for="user_name">NickName<span class="required">*</span></label>
-            <input type="text" name="user_name" size="30" required="required"/>
+            <input type="text" name="user_name" size="30" required="required" />
         </div>
 
         <div class="item">
             <label for="user_email">E-mail<span class="required">*</span></label>
-            <input type="email" name="user_email" size="30" onblur="isEmail(this.value)" placeholder="test@example.com" required="required"/>
+            <input type="email" name="user_email" size="30" onchange="isEmail(this.value)" placeholder="test@example.com"
+                required="required" />
             <span class="formTip"></span>
         </div class="item">
 
         <div class="item">
             <label for="message">Message<span class="required">*</span></label>
             <textarea name="message" cols="45" rows="6" required="required"></textarea>
-        </div>       
+        </div>
 
-        <p class="required">*is required</p>        
-        <br/>
+        <p class="required">*is required</p>
+        <br />
         <input id="sendZeki" type="submit" value="Send 📤" />
-        
+
     </form>
     <div id="send-status" class="sendStatus">
-        <div class="sending"></div>        
+        <div class="sending"></div>
         <p class="msg">Sending mail...</p>
-        <a href='javascript:void(0)' class='return'><= return</a>
-        
-    </div>
+        <a href='javascript:void(0)' class='return'>
+            <= return</a>
 
-    <script type="text/javascript">
-        initContact();
-    </script>    
+    </div>
 </template>
 
+<script>
+    emailjs.init('A1O32767lvzH8CNyq');
+    const sendStatusEl = zk.getId('send-status');
+    const contactFormEl = zk.getId('contact-form');
+    sendStatusEl.addClass('d-none');
+    contactFormEl.on('submit', function (event) {
+        event.preventDefault();
+        // generate a five digit number for the contact_number variable
+        this.contact_number.value = Math.random() * 100000 | 0;
+        // these IDs from the previous steps
+        contactFormEl.addClass('d-none');
+        sendStatusEl.delClass('d-none');
+        emailjs.sendForm('service_zekixfly', 'template_zekixfly', this)
+            .then(function () {
+                resultPage("✅ Mail sent successfully!");
+            }, function (error) {
+                resultPage(`❌ Sorry, Mail delivery failed...<br />${error?.text}`);
+            });
+    });
+
+    function resultPage(message) {
+        sendStatusEl.getClass('msg')[0].html = message;
+        sendStatusEl.getClass('sending')[0].addClass('d-none');
+        sendStatusEl.getClass('return')[0].addClass('d-block');
+        sendStatusEl.getClass('return')[0].on('click', () => {
+            sendStatusEl.getClass('sending')[0].delClass('d-none');
+            sendStatusEl.getClass('return')[0].delClass('d-block');
+            sendStatusEl.getClass('msg')[0].html = 'Sending mail...';
+            sendStatusEl.addClass('d-none');
+            contactFormEl.delClass('d-none');
+        })
+    }
+
+    function isEmail(email) {
+        const fromTipEl = zk.getClass("formTip")[0];
+        var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if (!regex.test(email)) {
+            fromTipEl.html = "Please fill in the correct email format!";
+        } else {
+            fromTipEl.html = "";
+            return true;
+        }
+    }
+
+    window.isEmail = isEmail;
+</script>

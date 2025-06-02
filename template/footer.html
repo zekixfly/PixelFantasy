@@ -1,19 +1,25 @@
-<template id='footer'>    
-    <small>Copyright &copy; 2022~Now · All Right Reserved · <br/>Latest Update：<span id="lastUpdate"></span></small>
-
-    <script type="text/javascript">
-        const millisecond = new Date(document.lastModified);
-        const year = millisecond.getFullYear();
-        const month = millisecond.getMonth()+1;
-        const date = millisecond.getDate();
-        const hours = millisecond.getHours();
-        const minutes = millisecond.getMinutes();
-
-        function checkDate(date) {  
-            return date.toString().length < 2 ? `0${date}` : date;
-        }
-
-        const formateDate = `${year}-${checkDate(month)}-${checkDate(date)} ${checkDate(hours)}:${checkDate(minutes)}`
-        ZekiCore.getId('lastUpdate').html = formateDate;
-    </script>    
+<template id="footer">
+  <small
+    >Copyright &copy; 2022~Now · All Right Reserved · <br />Latest Update：<span
+      id="lastUpdate"
+    ></span
+  ></small>
 </template>
+
+<script>
+  const millisecond = new Date(document.lastModified);
+  const year = millisecond.getFullYear();
+  const month = millisecond.getMonth() + 1;
+  const date = millisecond.getDate();
+  const hours = millisecond.getHours();
+  const minutes = millisecond.getMinutes();
+
+  function checkDate(date) {
+    return date.toString().length < 2 ? `0${date}` : date;
+  }
+
+  const formateDate = `${year}-${checkDate(month)}-${checkDate(
+    date
+  )} ${checkDate(hours)}:${checkDate(minutes)}`;
+  zk.getId("lastUpdate").html = formateDate;
+</script>

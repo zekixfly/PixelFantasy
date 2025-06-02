@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redirecting...</title>
+    <script>
+      // 自動把使用者導回 index.html 並保留 hash 或 pathname
+      const redirectTo = location.pathname + location.search + location.hash;
+      sessionStorage.redirect = redirectTo;
+      location.replace('./index.html');
+    </script>
+  </head>
+  <body>
+    Redirecting...
+  </body>
+</html>
