@@ -1,4 +1,4 @@
 ZekiCore.importJS([
-  "scripts/init.js",
   "scripts/constants.js",
+  "scripts/init.js",
 ]);
