@@ -38,8 +38,10 @@
       }
   }
 
+  const bodyEl = zk.one("body");
   const moreEl = zk.getId("newsMore_Line").getClass("more")[0];
   const newsInfoTableEl = zk.getClass("newsInfo_Table")[0];
+  if(bodyEl.hasClass('overflow-hidden')) bodyEl.delClass("overflow-hidden");
   moreEl.on("click", () => {
       //點擊more時判斷news數量是否只有7則，超過7則表示已點擊過more，將不在增加news數量。
       if( newsInfoTableEl.getTag("li").length <= 7 ){

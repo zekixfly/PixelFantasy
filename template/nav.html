@@ -26,6 +26,8 @@
 <script>
   const navListEl = zk.getId("navList");
   const navListMobileEl = zk.getId("navList-m");
+  const bodyEl = zk.one("body");
+  const navEl = zk.one("nav");
   const routes = [
     { path: "/", template: "news.html" },
     { path: "/vogue", template: "pixel.html" },
@@ -40,8 +42,6 @@
 
   let menuSwitch = false;
   const menuSlide = () => {
-    const bodyEl = zk.one("body");
-    const navEl = zk.one("nav");
     menuSwitch = !menuSwitch;
     if (menuSwitch) {
       navListMobileEl.getClass("menu")[0].addClass("d-none");
@@ -54,8 +54,7 @@
       bodyEl.delClass("offset-260");
       navEl.delClass("offset-0");
     }
-  }; 
-  
+  };
   navListMobileEl.on("click", menuSlide);
 
   navListEl.on("click", (e) => {
