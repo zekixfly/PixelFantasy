@@ -7,19 +7,9 @@
 </template>
 
 <script>
-  const millisecond = new Date(document.lastModified);
-  const year = millisecond.getFullYear();
-  const month = millisecond.getMonth() + 1;
-  const date = millisecond.getDate();
-  const hours = millisecond.getHours();
-  const minutes = millisecond.getMinutes();
-
-  function checkDate(date) {
-    return date.toString().length < 2 ? `0${date}` : date;
-  }
-
-  const formateDate = `${year}-${checkDate(month)}-${checkDate(
-    date
-  )} ${checkDate(hours)}:${checkDate(minutes)}`;
+  const dateTime = new Date(document.lastModified);
+  const hour = dateTime.getHours() + 8;
+  dateTime.setHours(hour);
+  const formateDate = dateTime.toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '');
   zk.getId("lastUpdate").html = formateDate;
 </script>

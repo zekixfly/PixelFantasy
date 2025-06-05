@@ -36,24 +36,24 @@
     const data = await res.json();
     workEl.html = "";
     const slotContentEl = zk.one("[slot=content]");
-    for (var idx in data) {
+    for (let pixel of data) {
       // console.log(`${id.replace(/^./, id[0].toUpperCase())} Fantasy`);
       // 替換id第一個小寫字母為大寫
-      if (`${id.replace(/^./, id[0].toUpperCase())}` === data[idx].category) {
-        var divEl = zk.makeTag("div");
+      if (`${id.replace(/^./, id[0].toUpperCase())}` === pixel.category) {
+        let divEl = zk.makeTag("div");
         divEl.className = "pixelart_Thumbnail";
-        var imgEl = zk.makeTag("img");
-        imgEl.src = `img/pixelart/${id}/` + data[idx].src;
+        let imgEl = zk.makeTag("img");
+        imgEl.src = `img/pixelart/${id}/` + pixel.src;
         imgEl.on("load", () => {
           zk.getClass("showBoxPreloader")[0].addClass("d-none");
         });
         divEl.addKid(imgEl);
         divEl.setAttrs({
-          title: data[idx].title,
-          date: data[idx].date,
-          category: data[idx].category,
-          description: data[idx].description,
-          src: data[idx].src,
+          title: pixel.title,
+          date: pixel.date,
+          category: pixel.category,
+          description: pixel.description,
+          src: pixel.src,
         });
 
         const showBoxEl = zk.getId("showBox");
@@ -80,9 +80,7 @@
               showBoxClose();
             });
             showBoxEl.getClass("showBoxCover")[0].on("click", (event) => {
-              event.preventDefault();
               event.stopPropagation();
-              console.log("event.preventDefault");
             });
             function showBoxClose() {
               showBoxContainerEl.scrollTop = 0;
@@ -102,7 +100,7 @@
     所以最後剩餘的元素因為數量不足又加上自動分配空間的關係，
     所以乍看之下像是跑版， 因此製造空白的元素來做填充防止跑版。 */
     for (let i = 0; i < 4; i++) {
-      var dummyEl = zk.makeTag("div");
+      let dummyEl = zk.makeTag("div");
       dummyEl.className = "filling-empty-space-childs";
       workEl.addKid(dummyEl);
     }
@@ -135,7 +133,7 @@
 
       // 判斷是否從News點擊載入
       if (slotContentEl.getAttr("src")) {
-        zk.all(`div[src="${slotContentEl.getAttr("src")}"]`)[0].click();
+        zk.one(`div[src="${slotContentEl.getAttr("src")}"]`).click();
       }
     });
   }
