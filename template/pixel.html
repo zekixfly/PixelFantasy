@@ -1,6 +1,7 @@
 <template>
   <div id="pixelart">
     <h1 class="headline">
+      <!-- // 替換id第一個小寫字母為大寫 -->
       {{ id.replace(/^./, id[0].toUpperCase()); }} Fantasy
     </h1>
 
@@ -32,14 +33,16 @@
     zk.getId("pixelart").dataBind({ id });
     const workEl = zk.getId(`${id}Work`);
     workEl.addClass("d-none");
-    const res = await fetch(API_GET_DATA);
-    const data = await res.json();
     workEl.html = "";
     const slotContentEl = zk.one("[slot=content]");
-    for (let pixel of data) {
-      // console.log(`${id.replace(/^./, id[0].toUpperCase())} Fantasy`);
-      // 替換id第一個小寫字母為大寫
-      if (`${id.replace(/^./, id[0].toUpperCase())}` === pixel.category) {
+
+    try {
+      const res = await fetch(API_GET_DATA);
+      const data = await res.json();
+      const filteredData = data.filter(
+        (pixel) => `${id.replace(/^./, id[0].toUpperCase())}` === pixel.category
+      );
+      for (let pixel of filteredData) {
         let divEl = zk.makeTag("div");
         divEl.className = "pixelart_Thumbnail";
         let imgEl = zk.makeTag("img");
@@ -60,6 +63,21 @@
         const showBoxBackGroundEl = zk.getClass("showBoxBackGround")[0];
         const bodyEl = zk.getTag("body")[0];
         const showBoxContainerEl = zk.getClass("showBoxContainer")[0];
+        const showBoxCloseEl = zk.getClass("showBoxClose")[0];
+        const showBoxCoverEl = showBoxEl.getClass("showBoxCover")[0];
+
+        function showBoxClose() {
+          showBoxContainerEl.scrollTop = 0;
+          showBoxEl.delClass("d-block");
+          bodyEl.delClass("overflow-hidden");
+          showBoxBackGroundEl.delClass("d-block");
+          slotContentEl.delAttr("src");
+        }
+
+        showBoxCloseEl.on("click", showBoxClose);
+        showBoxContainerEl.on("click", showBoxClose);
+        showBoxCoverEl.on("click", (event) => event.stopPropagation());
+
         if (showBoxEl != null) {
           divEl.on("click", (event) => {
             showBoxBackGroundEl.addClass("d-block");
@@ -69,31 +87,16 @@
               zk.toZekiEl(event.currentTarget).getAttr("src");
             showBoxEl.getClass("showBoxTitle")[0].html =
               event.currentTarget.title;
-            showBoxEl.getClass("showBoxInfo")[0].html = zk.toZekiEl(
-              event.currentTarget
-            ).getAttr("description");
+            showBoxEl.getClass("showBoxInfo")[0].html = zk
+              .toZekiEl(event.currentTarget)
+              .getAttr("description");
             bodyEl.addClass("overflow-hidden");
-            zk.getClass("showBoxClose")[0].on("click", (event) => {
-              showBoxClose();
-            });
-            showBoxContainerEl.on("click", (event) => {
-              showBoxClose();
-            });
-            showBoxEl.getClass("showBoxCover")[0].on("click", (event) => {
-              event.stopPropagation();
-            });
-            function showBoxClose() {
-              showBoxContainerEl.scrollTop = 0;
-              showBoxEl.delClass("d-block");
-              bodyEl.delClass("overflow-hidden");
-              showBoxBackGroundEl.delClass("d-block");
-              slotContentEl.delAttr("src");
-            }
           });
         }
-
         workEl.addKid(divEl);
       }
+    } catch (error) {
+      console.error("資料載入失敗", error);
     }
 
     /* 在CSS裡，因justify-content使用space-evenly空間平均分配，

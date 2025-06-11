@@ -1,73 +1,60 @@
-<template id="news">
+<template>
   <h1 class="headline">News</h1>
   <div id="newsInfo"></div>
 </template>
 
 <script>
-  const res = await fetch(API_GET_DATA);
-  const data =  await res.json();
   const newsInfoEl = zk.getId('newsInfo');
   newsInfoEl.html = '';
   let ulEl = zk.makeTag("ul");
   ulEl.className = "newsInfo_Table";
 
-  for(let idx in data){
+  try {
+    const res = await fetch(API_GET_DATA);
+    const data = await res.json();
+    for(let pixel of data){
 
-      let liEl = zk.makeTag("li");
-      let dateEl = zk.makeTag("date");
-      let spanEl = zk.makeTag("span");
+        let liEl = zk.makeTag("li");
+        let dateEl = zk.makeTag("date");
+        let spanEl = zk.makeTag("span");
 
-      dateEl.html = data[idx].date;
-      spanEl.html = `「${data[idx].category}」新增：${data[idx].title}`;
+        dateEl.html = pixel.date;
+        spanEl.html = `「${pixel.category}」新增：${pixel.title}`;
 
-      liEl.setAttrs({
-          "category": data[idx].category,
-          "src": data[idx].src
-      });
+        liEl.setAttrs({
+            "category": pixel.category,
+            "src": pixel.src
+        });
 
-      liEl.addKids(dateEl, spanEl);
-      ulEl.addKid(liEl);
+        liEl.addKids(dateEl, spanEl);
+        ulEl.addKid(liEl);
 
-      newsInfoEl.addKid(ulEl);
-      if(idx == 6) {
-          let divEl = zk.makeTag("div");
-          divEl.id = "newsMore_Line"
-          divEl.html = "<a href='javascript:void(0)' class='more'>More...▼</a>";
-          newsInfoEl.addKid(divEl);
-          break;
-      }
+        newsInfoEl.addKid(ulEl);
+    }
+  } catch (error) {
+    console.error("資料載入失敗", error);
   }
+
+  ulEl.getTag("li").forEach((liEl, idx) => {
+    if (idx > 6) liEl.hide();
+  });
+
+  let divEl = zk.makeTag("div");
+  divEl.id = "newsMore_Line"
+  divEl.html = "<a href='javascript:void(0)' class='more'>More...▼</a>";
+  newsInfoEl.addKid(divEl);
 
   const bodyEl = zk.one("body");
   const moreEl = zk.getId("newsMore_Line").getClass("more")[0];
   const newsInfoTableEl = zk.getClass("newsInfo_Table")[0];
   if(bodyEl.hasClass('overflow-hidden')) bodyEl.delClass("overflow-hidden");
   moreEl.on("click", () => {
-      //點擊more時判斷news數量是否只有7則，超過7則表示已點擊過more，將不在增加news數量。
-      if( newsInfoTableEl.getTag("li").length <= 7 ){
-          for(let i = 7; i<data.length; i++){
-              let liEl = zk.makeTag("li");
-              let dateEl = zk.makeTag("date");
-              let spanEl = zk.makeTag("span");
-
-              dateEl.html = data[i].date;
-              spanEl.html = `「${data[i].category}」新增：${data[i].title}`;
-
-              liEl.setAttrs({
-                  "category": data[i].category,
-                  "src": data[i].src
-              });
-              liEl.addKids(dateEl, spanEl);
-              ulEl.addKid(liEl);
-          }
-          moreEl.text = "▲...Less";
-      }
-      else{
-          for(let i = 7; i<data.length; i++){
-              newsInfoTableEl.getTag("li")[7].remove();
-          }
-          moreEl.text = "More...▼";
-      }
+      const liEls = ulEl.getTag("li");
+      const isMore = moreEl.text.includes("More");
+      liEls.forEach((liEl, idx) => {       
+        if (idx > 6) isMore ? liEl.show() : liEl.hide();
+      });
+      moreEl.text = isMore ? "▲...Less" : "More...▼";
   });
   // 點擊News列表，將會自動載入相對應作品頁面。
   newsInfoEl.on('click', event => {

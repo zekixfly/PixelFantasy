@@ -1,4 +1,4 @@
-<template id="nav">
+<template>
   <div id="navList-m" class="nav-list-m">
     <img class="menu" src="././svg/iconmonstr-menu.svg" alt="" />
     <img class="close" src="././svg/iconmonstr-x-mark-lined.svg" alt="" />
@@ -56,10 +56,5 @@
     }
   };
   navListMobileEl.on("click", menuSlide);
-
-  navListEl.on("click", (e) => {
-    if (zk.toZekiEl(e.target).getAttr("href")) {
-      navListMobileEl.getStyle("display") !== "none" && menuSlide();
-    }
-  });
+  navListEl.all("a[href]").on("click", () => navListMobileEl.getStyle("display") !== "none" && menuSlide());
 </script>
