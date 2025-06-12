@@ -35,6 +35,24 @@
     workEl.addClass("d-none");
     workEl.html = "";
     const slotContentEl = zk.one("[slot=content]");
+    const showBoxEl = zk.getId("showBox");
+    const showBoxBackGroundEl = zk.getClass("showBoxBackGround")[0];
+    const bodyEl = zk.getTag("body")[0];
+    const showBoxContainerEl = zk.getClass("showBoxContainer")[0];
+    const showBoxCloseEl = zk.getClass("showBoxClose")[0];
+    const showBoxCoverEl = showBoxEl.getClass("showBoxCover")[0];
+
+    function showBoxClose() {
+      showBoxContainerEl.scrollTop = 0;
+      showBoxEl.delClass("d-block");
+      bodyEl.delClass("overflow-hidden");
+      showBoxBackGroundEl.delClass("d-block");
+      slotContentEl.delAttr("src");
+    }
+
+    showBoxCloseEl.on("click", showBoxClose);
+    showBoxContainerEl.on("click", showBoxClose);
+    showBoxCoverEl.on("click", (event) => event.stopPropagation());
 
     try {
       const res = await fetch(API_GET_DATA);
@@ -58,25 +76,6 @@
           description: pixel.description,
           src: pixel.src,
         });
-
-        const showBoxEl = zk.getId("showBox");
-        const showBoxBackGroundEl = zk.getClass("showBoxBackGround")[0];
-        const bodyEl = zk.getTag("body")[0];
-        const showBoxContainerEl = zk.getClass("showBoxContainer")[0];
-        const showBoxCloseEl = zk.getClass("showBoxClose")[0];
-        const showBoxCoverEl = showBoxEl.getClass("showBoxCover")[0];
-
-        function showBoxClose() {
-          showBoxContainerEl.scrollTop = 0;
-          showBoxEl.delClass("d-block");
-          bodyEl.delClass("overflow-hidden");
-          showBoxBackGroundEl.delClass("d-block");
-          slotContentEl.delAttr("src");
-        }
-
-        showBoxCloseEl.on("click", showBoxClose);
-        showBoxContainerEl.on("click", showBoxClose);
-        showBoxCoverEl.on("click", (event) => event.stopPropagation());
 
         if (showBoxEl != null) {
           divEl.on("click", (event) => {
