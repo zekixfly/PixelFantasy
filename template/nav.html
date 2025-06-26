@@ -29,7 +29,7 @@
   const bodyEl = zk.one("body");
   const navEl = zk.one("nav");
   const routes = [
-    { path: "/", template: "news.html" },
+    { path: "/", redirect: "/news" },
     { path: "/vogue", template: "pixel.html" },
     { path: "/animal", template: "pixel.html" },
     { path: "/vehicle", template: "pixel.html" },
