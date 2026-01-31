@@ -28,7 +28,7 @@
   </div>
 </template>
 
-<script type="text/javascript">
+<script>
   async function pixelArtWork(id) {
     zk.getId("pixelart").dataBind({ id });
     const workEl = zk.getId(`${id}Work`);
@@ -64,7 +64,7 @@
         let divEl = zk.makeTag("div");
         divEl.className = "pixelart_Thumbnail";
         let imgEl = zk.makeTag("img");
-        imgEl.src = `img/pixelart/${id}/` + pixel.src;
+        imgEl.src = `../img/pixelart/${id}/` + pixel.src;
         imgEl.on("load", () => {
           zk.getClass("showBoxPreloader")[0].addClass("d-none");
         });
@@ -82,7 +82,7 @@
             showBoxBackGroundEl.addClass("d-block");
             showBoxEl.addClass("d-block");
             showBoxEl.getTag("img")[0].src =
-              `img/pixelart/${id}/` +
+              `../img/pixelart/${id}/` +
               zk.toZekiEl(event.currentTarget).getAttr("src");
             showBoxEl.getClass("showBoxTitle")[0].html =
               event.currentTarget.title;
