@@ -5,9 +5,8 @@
     <title>Redirecting...</title>
     <script>
       // 自動把使用者導回 index.html 並保留 hash 或 pathname
-      const redirectTo = location.pathname + location.search + location.hash;
-      sessionStorage.redirect = redirectTo;
-      location.replace('./index.html');
+      !sessionStorage.redirect && (sessionStorage.redirect = location.pathname + location.search + location.hash);
+      sessionStorage.basePath ? location.replace(sessionStorage.basePath): location.replace("./index.html");
     </script>
   </head>
   <body>
